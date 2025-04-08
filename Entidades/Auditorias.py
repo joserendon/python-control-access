@@ -1,4 +1,4 @@
-class Auditoria:
+class Auditorias:
     def __init__(self):
         self.id = 0
         self.id_usuario = 0
