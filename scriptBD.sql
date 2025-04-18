@@ -255,3 +255,73 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_empresas()
+BEGIN
+    SELECT id, nombre FROM empresas ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_empresas(
+    IN p_empresa VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar la empresa (posible duplicado)';
+    END;
+
+    INSERT INTO empresas (nombre) VALUES (p_empresa);
+    SET Respuesta = 'Empresa insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_empresas(
+    IN p_id INT,
+    IN p_nueva_empresa VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM empresas WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE empresas SET nombre = p_nueva_empresa WHERE id = p_id;
+        SET Respuesta = 'Empresa actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_empresas(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM empresas WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM empresas WHERE id = p_id;
+        SET Respuesta = 'Empresa eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
