@@ -185,3 +185,73 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_areas()
+BEGIN
+    SELECT id, nombre FROM areas ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_areas(
+    IN p_area VARCHAR(100),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el área (posible duplicado)';
+    END;
+
+    INSERT INTO areas (nombre) VALUES (p_area);
+    SET Respuesta = 'Área insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_areas(
+    IN p_id INT,
+    IN p_nueva_area VARCHAR(100),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM areas WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE areas SET nombre = p_nueva_area WHERE id = p_id;
+        SET Respuesta = 'Área actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_areas(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM areas WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM areas WHERE id = p_id;
+        SET Respuesta = 'Área eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
