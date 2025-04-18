@@ -114,3 +114,74 @@ CREATE TABLE auditoria (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
     FOREIGN KEY (id_accion) REFERENCES acciones(id)
 );
+
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_estados()
+BEGIN
+    SELECT id, nombre FROM estados ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_estados(
+    IN p_estado VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el estado (posible duplicado)';
+    END;
+
+    INSERT INTO estados (nombre) VALUES (p_estado);
+    SET Respuesta = 'Estado insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_estados(
+    IN p_id INT,
+    IN p_nuevo_estado VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM estados WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE estados SET nombre = p_nuevo_estado WHERE id = p_id;
+        SET Respuesta = 'Estado actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_estados(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM estados WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM estados WHERE id = p_id;
+        SET Respuesta = 'Estado eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
