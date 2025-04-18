@@ -17,9 +17,9 @@ CREATE TABLE estados (
 -- Tabla de usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_completo VARCHAR(100) NOT NULL,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     id_rol INT NOT NULL,
     id_estado INT NOT NULL,
     FOREIGN KEY (id_rol) REFERENCES roles(id),
@@ -531,6 +531,91 @@ BEGIN
     ELSE
         DELETE FROM tipos_documento WHERE id = p_id;
         SET Respuesta = 'Tipo de documento eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_usuarios()
+BEGIN
+    SELECT id, nombre, usuario, password, id_rol, id_estado FROM usuarios ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_usuarios(
+    IN p_nombre VARCHAR(100),
+    IN p_usuario VARCHAR(50),
+    IN p_password VARCHAR(255),
+    IN p_id_rol INT,
+    IN p_id_estado INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el usuario (posible duplicado)';
+    END;
+
+    INSERT INTO usuarios (nombre, usuario, password, id_rol, id_estado)
+    VALUES (p_nombre, p_usuario, p_password, p_id_rol, p_id_estado);
+    SET Respuesta = 'Usuario insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_usuarios(
+    IN p_id INT,
+    IN p_nombre VARCHAR(100),
+    IN p_usuario VARCHAR(50),
+    IN p_password VARCHAR(255),
+    IN p_id_rol INT,
+    IN p_id_estado INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM usuarios WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE usuarios
+        SET nombre = p_nombre,
+            usuario = p_usuario,
+            password = p_password,
+            id_rol = p_id_rol,
+            id_estado = p_id_estado
+        WHERE id = p_id;
+        SET Respuesta = 'Usuario actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_usuarios(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM usuarios WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM usuarios WHERE id = p_id;
+        SET Respuesta = 'Usuario eliminado correctamente';
     END IF;
 END $$
 
