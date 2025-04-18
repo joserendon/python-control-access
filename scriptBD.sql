@@ -11,7 +11,7 @@ CREATE TABLE roles (
 -- Tabla de estados
 CREATE TABLE estados (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    estado VARCHAR(50) NOT NULL UNIQUE
+    nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- Tabla de usuarios
