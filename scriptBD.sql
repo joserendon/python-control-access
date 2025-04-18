@@ -465,3 +465,73 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_tipos_documento()
+BEGIN
+    SELECT id, nombre FROM tipos_documento ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_tipos_documento(
+    IN p_tipo_documento VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el tipo de documento (posible duplicado)';
+    END;
+
+    INSERT INTO tipos_documento (nombre) VALUES (p_tipo_documento);
+    SET Respuesta = 'Tipo de documento insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_tipos_documento(
+    IN p_id INT,
+    IN p_nuevo_tipo_documento VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM tipos_documento WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE tipos_documento SET nombre = p_nuevo_tipo_documento WHERE id = p_id;
+        SET Respuesta = 'Tipo de documento actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_tipos_documento(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM tipos_documento WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM tipos_documento WHERE id = p_id;
+        SET Respuesta = 'Tipo de documento eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
