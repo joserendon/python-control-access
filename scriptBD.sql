@@ -325,3 +325,73 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_motivos()
+BEGIN
+    SELECT id, nombre FROM motivos ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_motivos(
+    IN p_motivo VARCHAR(100),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el motivo (posible duplicado)';
+    END;
+
+    INSERT INTO motivos (nombre) VALUES (p_motivo);
+    SET Respuesta = 'Motivo insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_motivos(
+    IN p_id INT,
+    IN p_nuevo_motivo VARCHAR(100),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM motivos WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE motivos SET nombre = p_nuevo_motivo WHERE id = p_id;
+        SET Respuesta = 'Motivo actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_motivos(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+
+    SELECT COUNT(*) INTO v_existente FROM motivos WHERE id = p_id;
+
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM motivos WHERE id = p_id;
+        SET Respuesta = 'Motivo eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
