@@ -11,7 +11,7 @@ class EstadosRepositorio(BaseRepositorio):
         for elemento in rows:
             entidad: Estados = Estados.Estados();
             entidad.set_id(elemento[0]);
-            entidad.set_estado(elemento[1]);
+            entidad.set_name(elemento[1]);
             estados.append(entidad);
 
         return estados   
