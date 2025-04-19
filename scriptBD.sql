@@ -907,3 +907,88 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_personas()
+BEGIN
+    SELECT id, id_tipo_documento, id_tipo_persona, documento, nombre_completo, telefono, id_empresa
+    FROM personas ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_personas(
+    IN p_id_tipo_documento INT,
+    IN p_id_tipo_persona INT,
+    IN p_documento VARCHAR(20),
+    IN p_nombre_completo VARCHAR(100),
+    IN p_telefono VARCHAR(20),
+    IN p_id_empresa INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar la persona (Posible duplicado)';
+    END;
+
+    INSERT INTO personas (id_tipo_documento, id_tipo_persona, documento, nombre_completo, telefono, id_empresa)
+    VALUES (p_id_tipo_documento, p_id_tipo_persona, p_documento, p_nombre_completo, p_telefono, p_id_empresa);
+    SET Respuesta = 'Persona insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_personas(
+    IN p_id INT,
+    IN p_id_tipo_documento INT,
+    IN p_id_tipo_persona INT,
+    IN p_documento VARCHAR(20),
+    IN p_nombre_completo VARCHAR(100),
+    IN p_telefono VARCHAR(20),
+    IN p_id_empresa INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM personas WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE personas
+        SET id_tipo_documento = p_id_tipo_documento,
+            id_tipo_persona = p_id_tipo_persona,
+            documento = p_documento,
+            nombre_completo = p_nombre_completo,
+            telefono = p_telefono,
+            id_empresa = p_id_empresa
+        WHERE id = p_id;
+        SET Respuesta = 'Persona actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_personas(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM personas WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM personas WHERE id = p_id;
+        SET Respuesta = 'Persona eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
