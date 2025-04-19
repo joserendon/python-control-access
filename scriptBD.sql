@@ -639,7 +639,7 @@ CREATE PROCEDURE proc_insert_acciones(
 BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el usuario (posible duplicado)';
+        SET Respuesta = 'Error al insertar la acción (posible duplicado)';
     END;
 
     INSERT INTO acciones (nombre) VALUES (p_nombre);
@@ -687,3 +687,75 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_auditorias()
+BEGIN
+    SELECT id, id_usuario, id_accion, descripcion, fecha_hora FROM auditorias ORDER BY id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE proc_insert_auditorias(
+    IN p_id_usuario INT,
+    IN p_id_accion INT,
+    IN p_descripcion TEXT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar la auditoria (posible duplicado)';
+    END;
+
+    INSERT INTO auditorias (id_usuario, id_accion, descripcion)
+    VALUES (p_id_usuario, p_id_accion, p_descripcion);
+    SET Respuesta = 'Auditoría insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_auditorias(
+    IN p_id INT,
+    IN p_id_usuario INT,
+    IN p_id_accion INT,
+    IN p_descripcion TEXT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM auditorias WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE auditorias
+        SET id_usuario = p_id_usuario,
+            id_accion = p_id_accion,
+            descripcion = p_descripcion
+        WHERE id = p_id;
+        SET Respuesta = 'Auditoría actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_auditorias(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM auditorias WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM auditorias WHERE id = p_id;
+        SET Respuesta = 'Auditoría eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
