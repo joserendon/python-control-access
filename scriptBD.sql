@@ -129,12 +129,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_estados(
     IN p_estado VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el estado (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el estado: ', @p1);
     END;
 
     INSERT INTO estados (nombre) VALUES (p_estado);
@@ -199,12 +200,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_areas(
     IN p_area VARCHAR(100),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el área (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el área: ', @p1);
     END;
 
     INSERT INTO areas (nombre) VALUES (p_area);
@@ -269,12 +271,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_empresas(
     IN p_empresa VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar la empresa (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar la empresa: ', @p1);
     END;
 
     INSERT INTO empresas (nombre) VALUES (p_empresa);
@@ -339,12 +342,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_motivos(
     IN p_motivo VARCHAR(100),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el motivo (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el motivo: ', @p1);
     END;
 
     INSERT INTO motivos (nombre) VALUES (p_motivo);
@@ -409,12 +413,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_roles(
     IN p_rol VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el rol (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el rol: ', @p1);
     END;
 
     INSERT INTO roles (nombre) VALUES (p_rol);
@@ -479,12 +484,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_tipos_documento(
     IN p_tipo_documento VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el tipo de documento (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el tipo de documento: ', @p1);
     END;
 
     INSERT INTO tipos_documento (nombre) VALUES (p_tipo_documento);
@@ -553,12 +559,13 @@ CREATE PROCEDURE proc_insert_usuarios(
     IN p_password VARCHAR(255),
     IN p_id_rol INT,
     IN p_id_estado INT,
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el usuario (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el usuario: ', @p1);
     END;
 
     INSERT INTO usuarios (nombre, usuario, password, id_rol, id_estado)
@@ -634,12 +641,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_acciones(
     IN p_nombre VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar la acción (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar la acción: ', @p1);
     END;
 
     INSERT INTO acciones (nombre) VALUES (p_nombre);
@@ -693,19 +701,22 @@ CREATE PROCEDURE proc_select_auditorias()
 BEGIN
     SELECT id, id_usuario, id_accion, descripcion, fecha_hora FROM auditorias ORDER BY id;
 END $$
+
 DELIMITER ;
 
 DELIMITER $$
+
 CREATE PROCEDURE proc_insert_auditorias(
     IN p_id_usuario INT,
     IN p_id_accion INT,
     IN p_descripcion TEXT,
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar la auditoria (posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar la auditoría: ', @p1);
     END;
 
     INSERT INTO auditorias (id_usuario, id_accion, descripcion)
@@ -714,6 +725,7 @@ BEGIN
 END $$
 
 DELIMITER ;
+
 
 DELIMITER $$
 
@@ -777,12 +789,13 @@ CREATE PROCEDURE proc_insert_accesos(
     IN p_id_area INT,
     IN p_id_motivo INT,
     IN p_id_tipo_acceso INT,
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el acceso (Posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el acceso: ', @p1);
     END;
 
     INSERT INTO accesos (id_puerta_acceso, id_persona, id_area, id_motivo, id_tipo_acceso)
@@ -854,12 +867,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_tipos_acceso(
     IN p_nombre VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el tipo de acceso (Posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el tipo de acceso: ', @p1);
     END;
 
     INSERT INTO tipos_acceso (nombre) VALUES (p_nombre);
@@ -926,12 +940,13 @@ CREATE PROCEDURE proc_insert_personas(
     IN p_nombre_completo VARCHAR(100),
     IN p_telefono VARCHAR(20),
     IN p_id_empresa INT,
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar la persona (Posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar la persona: ', @p1);
     END;
 
     INSERT INTO personas (id_tipo_documento, id_tipo_persona, documento, nombre_completo, telefono, id_empresa)
@@ -1005,12 +1020,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_tipos_persona(
     IN p_nombre VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar el tipo de persona (Posible duplicado) ';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar el tipo de persona: ', @p1);
     END;
 
     INSERT INTO tipos_persona (nombre) VALUES (p_nombre);
@@ -1071,12 +1087,13 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_insert_puertas_acceso(
     IN p_nombre VARCHAR(50),
-    OUT Respuesta VARCHAR(100)
+    OUT Respuesta VARCHAR(255)
 )
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SET Respuesta = 'Error al insertar la puerta (Posible duplicado)';
+        GET DIAGNOSTICS CONDITION 1 @p1 = MESSAGE_TEXT;
+        SET Respuesta = CONCAT('Error al insertar la puerta: ', @p1);
     END;
 
     INSERT INTO puertas_acceso (nombre) VALUES (p_nombre);
