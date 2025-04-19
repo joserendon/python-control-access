@@ -759,3 +759,84 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_accesos()
+BEGIN
+    SELECT id, id_puerta_acceso, id_persona, id_area, id_motivo, id_tipo_acceso, fecha_hora FROM accesos ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_accesos(
+    IN p_id_puerta_acceso INT,
+    IN p_id_persona INT,
+    IN p_id_area INT,
+    IN p_id_motivo INT,
+    IN p_id_tipo_acceso INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el acceso (Posible duplicado)';
+    END;
+
+    INSERT INTO accesos (id_puerta_acceso, id_persona, id_area, id_motivo, id_tipo_acceso)
+    VALUES (p_id_puerta_acceso, p_id_persona, p_id_area, p_id_motivo, p_id_tipo_acceso);
+    SET Respuesta = 'Acceso insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_accesos(
+    IN p_id INT,
+    IN p_id_puerta_acceso INT,
+    IN p_id_persona INT,
+    IN p_id_area INT,
+    IN p_id_motivo INT,
+    IN p_id_tipo_acceso INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM accesos WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE accesos
+        SET id_puerta_acceso = p_id_puerta_acceso,
+            id_persona = p_id_persona,
+            id_area = p_id_area,
+            id_motivo = p_id_motivo,
+            id_tipo_acceso = p_id_tipo_acceso
+        WHERE id = p_id;
+        SET Respuesta = 'Acceso actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_accesos(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM accesos WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM accesos WHERE id = p_id;
+        SET Respuesta = 'Acceso eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
