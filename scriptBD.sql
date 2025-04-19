@@ -637,7 +637,7 @@ CREATE PROCEDURE proc_insert_acciones(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar la acción (posible duplicado)';
     END;
@@ -703,7 +703,7 @@ CREATE PROCEDURE proc_insert_auditorias(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar la auditoria (posible duplicado)';
     END;
@@ -780,7 +780,7 @@ CREATE PROCEDURE proc_insert_accesos(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar el acceso (Posible duplicado)';
     END;
@@ -857,7 +857,7 @@ CREATE PROCEDURE proc_insert_tipos_acceso(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar el tipo de acceso (Posible duplicado)';
     END;
@@ -929,7 +929,7 @@ CREATE PROCEDURE proc_insert_personas(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar la persona (Posible duplicado)';
     END;
@@ -1008,7 +1008,7 @@ CREATE PROCEDURE proc_insert_tipos_persona(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar el tipo de persona (Posible duplicado) ';
     END;
@@ -1074,7 +1074,7 @@ CREATE PROCEDURE proc_insert_puertas_acceso(
     OUT Respuesta VARCHAR(100)
 )
 BEGIN
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SET Respuesta = 'Error al insertar la puerta (Posible duplicado)';
     END;
