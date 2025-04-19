@@ -992,3 +992,68 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_tipos_persona()
+BEGIN
+    SELECT id, nombre FROM tipos_persona ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_tipos_persona(
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el tipo de persona (Posible duplicado) ';
+    END;
+
+    INSERT INTO tipos_persona (nombre) VALUES (p_nombre);
+    SET Respuesta = 'Tipo de persona insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_tipos_persona(
+    IN p_id INT,
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM tipos_persona WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE tipos_persona SET nombre = p_nombre WHERE id = p_id;
+        SET Respuesta = 'Tipo de persona actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_tipos_persona(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM tipos_persona WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM tipos_persona WHERE id = p_id;
+        SET Respuesta = 'Tipo de persona eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
