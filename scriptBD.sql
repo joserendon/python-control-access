@@ -1057,3 +1057,69 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_puertas_acceso()
+BEGIN
+    SELECT id, nombre FROM puertas_acceso ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_puertas_acceso(
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar la puerta (Posible duplicado)';
+    END;
+
+    INSERT INTO puertas_acceso (nombre) VALUES (p_nombre);
+    SET Respuesta = 'Puerta insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_puertas_acceso(
+    IN p_id INT,
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM puertas_acceso WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE puertas_acceso SET nombre = p_nombre WHERE id = p_id;
+        SET Respuesta = 'Puerta actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_puertas_acceso(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM puertas_acceso WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM puertas_acceso WHERE id = p_id;
+        SET Respuesta = 'Puerta eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
