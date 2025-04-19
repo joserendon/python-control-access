@@ -105,7 +105,7 @@ CREATE TABLE acciones (
 );
 
 -- Tabla de auditoría
-CREATE TABLE auditoria (
+CREATE TABLE auditorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_accion INT NOT NULL,
@@ -620,3 +620,70 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_acciones()
+BEGIN
+    SELECT id, nombre FROM acciones ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_acciones(
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el usuario (posible duplicado)';
+    END;
+
+    INSERT INTO acciones (nombre) VALUES (p_nombre);
+    SET Respuesta = 'Acción insertada correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_acciones(
+    IN p_id INT,
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM acciones WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE acciones SET nombre = p_nombre WHERE id = p_id;
+        SET Respuesta = 'Acción actualizada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_acciones(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM acciones WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM acciones WHERE id = p_id;
+        SET Respuesta = 'Acción eliminada correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
