@@ -840,3 +840,70 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_select_tipos_acceso()
+BEGIN
+    SELECT id, nombre FROM tipos_acceso ORDER BY id;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_insert_tipos_acceso(
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SET Respuesta = 'Error al insertar el tipo de acceso (Posible duplicado)';
+    END;
+
+    INSERT INTO tipos_acceso (nombre) VALUES (p_nombre);
+    SET Respuesta = 'Tipo de acceso insertado correctamente';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_update_tipos_acceso(
+    IN p_id INT,
+    IN p_nombre VARCHAR(50),
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM tipos_acceso WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        UPDATE tipos_acceso SET nombre = p_nombre WHERE id = p_id;
+        SET Respuesta = 'Tipo de acceso actualizado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE proc_delete_tipos_acceso(
+    IN p_id INT,
+    OUT Respuesta VARCHAR(100)
+)
+BEGIN
+    DECLARE v_existente INT;
+    SELECT COUNT(*) INTO v_existente FROM tipos_acceso WHERE id = p_id;
+    IF v_existente = 0 THEN
+        SET Respuesta = 'ID no encontrado';
+    ELSE
+        DELETE FROM tipos_acceso WHERE id = p_id;
+        SET Respuesta = 'Tipo de acceso eliminado correctamente';
+    END IF;
+END $$
+
+DELIMITER ;
+
