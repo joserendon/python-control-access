@@ -17,8 +17,8 @@ CREATE TABLE estados (
 -- Tabla de usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    usuario VARCHAR(50) NOT NULL UNIQUE,
+    nombre VARCHAR(255) NOT NULL,
+    usuario VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     id_rol INT NOT NULL,
     id_estado INT NOT NULL,
@@ -554,8 +554,8 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE PROCEDURE proc_insert_usuarios(
-    IN p_nombre VARCHAR(100),
-    IN p_usuario VARCHAR(50),
+    IN p_nombre VARCHAR(255),
+    IN p_usuario VARCHAR(255),
     IN p_password VARCHAR(255),
     IN p_id_rol INT,
     IN p_id_estado INT,
@@ -579,8 +579,8 @@ DELIMITER $$
 
 CREATE PROCEDURE proc_update_usuarios(
     IN p_id INT,
-    IN p_nombre VARCHAR(100),
-    IN p_usuario VARCHAR(50),
+    IN p_nombre VARCHAR(255),
+    IN p_usuario VARCHAR(255),
     IN p_password VARCHAR(255),
     IN p_id_rol INT,
     IN p_id_estado INT,
