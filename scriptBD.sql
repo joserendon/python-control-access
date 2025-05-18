@@ -937,7 +937,7 @@ CREATE PROCEDURE proc_insert_personas(
     IN p_id_tipo_documento INT,
     IN p_id_tipo_persona INT,
     IN p_documento VARCHAR(255),
-    IN p_nombre_completo VARCHAR(255,
+    IN p_nombre_completo VARCHAR(255),
     IN p_telefono VARCHAR(255),
     IN p_id_empresa INT,
     OUT Respuesta VARCHAR(255)
