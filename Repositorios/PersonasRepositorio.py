@@ -3,6 +3,7 @@ from Repositorios.BaseRepositorio import BaseRepositorio
 from Utilidades import EncriptarAES;
 
 class PersonasRepositorio(BaseRepositorio):
+    encriptarAES = EncriptarAES.EncriptarAES();
 
     def obtener(self) -> list[Personas.Personas]:
         query = "{CALL proc_select_personas()}"
