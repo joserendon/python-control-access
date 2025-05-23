@@ -24,3 +24,13 @@ class Usuarios:
 
     def get_id_estado(self): return self.id_estado
     def set_id_estado(self, value): self.id_estado = value
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'usuario': self.usuario,
+            'password': self.password,
+            'id_rol': self.id_rol,
+            'id_estado': self.id_estado
+        }

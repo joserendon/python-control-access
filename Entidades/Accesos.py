@@ -22,3 +22,14 @@ class Accesos:
     def set_id_tipo_acceso(self, value): self.id_tipo_acceso = value
     def get_fecha_hora(self): return self.fecha_hora
     def set_fecha_hora(self, value): self.fecha_hora = value
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'id_puerta_acceso': self.id_puerta_acceso,
+            'id_persona': self.id_persona,
+            'id_area': self.id_area,
+            'id_motivo': self.id_motivo,
+            'id_tipo_acceso': self.id_tipo_acceso,
+            'fecha_hora': self.fecha_hora
+        }

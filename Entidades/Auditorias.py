@@ -16,3 +16,12 @@ class Auditorias:
     def set_descripcion(self, value): self.descripcion = value
     def get_fecha_hora(self): return self.fecha_hora
     def set_fecha_hora(self, value): self.fecha_hora = value
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'id_usuario': self.id_usuario,
+            'id_accion': self.id_accion,
+            'descripcion': self.descripcion,
+            'fecha_hora': self.fecha_hora
+        }

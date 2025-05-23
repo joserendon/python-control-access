@@ -22,3 +22,14 @@ class Personas:
     def set_telefono(self, value): self.telefono = value
     def get_id_empresa(self): return self.id_empresa
     def set_id_empresa(self, value): self.id_empresa = value
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'id_tipo_documento': self.id_tipo_documento,
+            'id_tipo_persona': self.id_tipo_persona,
+            'documento': self.documento,
+            'nombre_completo': self.nombre_completo,
+            'telefono': self.telefono,
+            'id_empresa': self.id_empresa
+        }
