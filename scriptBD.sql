@@ -544,6 +544,28 @@ DELIMITER ;
 
 DELIMITER $$
 
+CREATE PROCEDURE proc_select_usuario_por_usuario (
+    IN p_usuario VARCHAR(255)
+)
+BEGIN
+    SELECT 
+        id,
+        nombre,
+        usuario,
+        password,
+        id_rol,
+        id_estado
+    FROM 
+        Usuarios
+    WHERE 
+        usuario = p_usuario;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
 CREATE PROCEDURE proc_select_usuarios()
 BEGIN
     SELECT id, nombre, usuario, password, id_rol, id_estado FROM usuarios ORDER BY id;
@@ -1140,3 +1162,7 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+INSERT INTO ROLES (NOMBRE) VALUES ('Adminitrador');
+INSERT INTO estados (NOMBRE) VALUES ('Activo');
