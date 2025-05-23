@@ -61,9 +61,9 @@ CREATE TABLE personas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_tipo_documento INT NOT NULL,
     id_tipo_persona INT NOT NULL,
-    documento VARCHAR(20) NOT NULL UNIQUE,
-    nombre_completo VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20),
+    documento VARCHAR(255) NOT NULL UNIQUE,
+    nombre_completo VARCHAR(255) NOT NULL,
+    telefono VARCHAR(255),
     id_empresa INT,
     FOREIGN KEY (id_tipo_documento) REFERENCES tipos_documento(id),
     FOREIGN KEY (id_tipo_persona) REFERENCES tipos_persona(id),
@@ -958,9 +958,9 @@ DELIMITER $$
 CREATE PROCEDURE proc_insert_personas(
     IN p_id_tipo_documento INT,
     IN p_id_tipo_persona INT,
-    IN p_documento VARCHAR(20),
-    IN p_nombre_completo VARCHAR(100),
-    IN p_telefono VARCHAR(20),
+    IN p_documento VARCHAR(255),
+    IN p_nombre_completo VARCHAR(255),
+    IN p_telefono VARCHAR(255),
     IN p_id_empresa INT,
     OUT Respuesta VARCHAR(255)
 )
@@ -984,9 +984,9 @@ CREATE PROCEDURE proc_update_personas(
     IN p_id INT,
     IN p_id_tipo_documento INT,
     IN p_id_tipo_persona INT,
-    IN p_documento VARCHAR(20),
-    IN p_nombre_completo VARCHAR(100),
-    IN p_telefono VARCHAR(20),
+    IN p_documento VARCHAR(255),
+    IN p_nombre_completo VARCHAR(255),
+    IN p_telefono VARCHAR(255),
     IN p_id_empresa INT,
     OUT Respuesta VARCHAR(100)
 )
