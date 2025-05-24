@@ -4,7 +4,7 @@ from Api.RolesApi import roles_api
 from Api.EstadosApi import estados_api
 from Api.AreasApi import areas_api
 from Api.MotivosApi import motivos_api
-# from Api.EmpresasApi import empresas_api
+from Api.EmpresasApi import empresas_api
 # from Api.TiposDocumentoApi import tipos_documento_api
 # from Api.TiposPersonasApi import tipos_personas_api
 # from Api.AccesosApi import accesos_api
@@ -21,7 +21,7 @@ app.register_blueprint(roles_api)
 app.register_blueprint(estados_api)
 app.register_blueprint(areas_api)
 app.register_blueprint(motivos_api)
-# app.register_blueprint(empresas_api)
+app.register_blueprint(empresas_api)
 # app.register_blueprint(tipos_documento_api)
 # app.register_blueprint(tipos_personas_api)
 # app.register_blueprint(accesos_api)
